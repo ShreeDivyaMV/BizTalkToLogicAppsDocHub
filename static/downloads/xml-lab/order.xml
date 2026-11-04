@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Order xmlns="urn:example:orders" id="SO-1001">
+  <CustomerId>C-42</CustomerId>
+  <Quantity>2</Quantity>
+</Order>

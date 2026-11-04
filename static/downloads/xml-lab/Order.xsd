@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="urn:example:orders"
+  xmlns:o="urn:example:orders"
+  elementFormDefault="qualified">
+  <xs:simpleType name="NonEmptyText">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Order">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CustomerId" type="o:NonEmptyText"/>
+        <xs:element name="Quantity" type="xs:positiveInteger"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="o:NonEmptyText" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

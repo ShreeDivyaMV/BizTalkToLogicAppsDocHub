@@ -1,0 +1,139 @@
+---
+title: Workflow and messaging patterns
+description: Implement durable orchestration, correlation, transformations, connections, retries and recovery in Logic Apps Standard.
+---
+
+import {PatternDetail} from '../src/components/MigrationTools';
+
+# Technical migration cookbook
+
+Use each pattern independently. These are implementation decisions and tests, not sequential migration stages or an artifact support matrix.
+
+## Choose workflow boundaries {#workflow-boundaries}
+
+<PatternDetail id="workflow-boundaries" />
+
+See [hosting and isolation](./hosting.md).
+
+## Replace durable orchestrations {#durable-orchestrations}
+
+<PatternDetail id="durable-orchestrations" />
+
+A stateful workflow persists execution state; it does not provide an atomic transaction spanning a database, a broker and an HTTP API. Model committed side effects explicitly and use a compensating action when a later step fails. A compensation operation must itself handle retries and duplicate invocation.
+
+Use Scopes for related actions and `runAfter` conditions to express failure paths. This action fragment illustrates failure routing, not a complete workflow:
+
+```json
+{
+  "Process_order": {
+    "type": "Scope",
+    "actions": {
+      "Capture_order_id": {
+        "type": "Compose",
+        "inputs": "@triggerBody()?['orderId']"
+      }
+    },
+    "runAfter": {}
+  },
+  "Report_failure": {
+    "type": "Scope",
+    "actions": {
+      "Fail_run": {
+        "type": "Terminate",
+        "inputs": {
+          "runStatus": "Failed",
+          "runError": {
+            "code": "OrderProcessingFailed",
+            "message": "Order processing failed; inspect correlated action telemetry."
+          }
+        }
+      }
+    },
+    "runAfter": {
+      "Process_order": ["Failed", "TimedOut"]
+    }
+  }
+}
+```
+
+In the real flow, validate `orderId` and send diagnostic metadata to the appropriate monitoring or failure destination **before** terminating. `Terminate` alone is not a recovery queue.
+
+## Preserve correlation and ordering {#correlation}
+
+<PatternDetail id="correlation" />
+
+A workflow run ID is an execution identifier, not a replacement for a business correlation key. Carry an order/conversation ID through broker properties, workflow data and downstream calls.
+
+For session-based brokering, confirm that the selected connector operation supports the required session and settlement behavior. Setting trigger concurrency to one does not create global ordering across multiple workflows, hosts or producers.
+
+## Validate message contracts {#schema-validation}
+
+<PatternDetail id="schema-validation" />
+
+## Reuse maps deliberately {#transformations}
+
+<PatternDetail id="transformations" />
+
+Use [the transformation guide](./transforms.md) and [local mapping lab](./workshop.md) for executable examples.
+
+## Decompose pipeline behavior {#pipelines}
+
+<PatternDetail id="pipelines" />
+
+## Replace adapter operations {#connectors}
+
+<PatternDetail id="connectors" />
+
+See [connections, identity and networking](./connectivity.md).
+
+## Adapt custom .NET logic {#custom-code}
+
+<PatternDetail id="custom-code" />
+
+See [custom code boundaries and limitations](./custom-code.md).
+
+## Preserve B2B contracts {#b2b}
+
+<PatternDetail id="b2b" />
+
+## Package and configure Standard {#deployment}
+
+<PatternDetail id="deployment" />
+
+See [project layout and configuration](./deployment.md).
+
+## Trace business outcomes {#observability}
+
+<PatternDetail id="observability" />
+
+## Make retries and replay safe {#recovery}
+
+<PatternDetail id="recovery" />
+
+For an action that supports retry configuration, an illustrative policy inside its `inputs` is:
+
+```json
+{
+  "retryPolicy": {
+    "type": "exponential",
+    "count": 3,
+    "interval": "PT10S"
+  }
+}
+```
+
+Check operation-specific limits. Do not retry non-idempotent side effects blindly. Use the same stable business key on retries and persist processing state in a store with atomic conditional writes. A "look up, then insert" sequence without concurrency protection is vulnerable to duplicate processing.
+
+Handle the crash window between committing an external side effect and recording completion. Prefer downstream idempotency support or a transactional outbox/inbox design where appropriate; a completed flag alone does not close that window.
+
+## Troubleshooting
+
+| Symptom | Inspect first | Technical correction to evaluate |
+| --- | --- | --- |
+| Duplicate business records | Retry history, trigger redelivery and downstream IDs | Atomic deduplication and downstream idempotency |
+| Error path never runs | Action status and `runAfter` dependencies | Include actual failure/timeout statuses and check skipped-parent behavior |
+| Unrelated conversations mix | Business IDs, session IDs and shared mutable state | Explicit conversation keys and isolated state |
+| Lost messages after "success" | Broker settlement and target acknowledgment | Align acknowledgment with durable completion |
+| Recovery repeats an irreversible action | Source of replay and side-effect commit state | Reconcile before replay; use safe compensation or deduplication |
+
+References: [error handling and retry configuration](https://learn.microsoft.com/en-us/azure/logic-apps/error-exception-handling), [Standard runtime model](https://learn.microsoft.com/en-us/azure/logic-apps/single-tenant-overview-compare).

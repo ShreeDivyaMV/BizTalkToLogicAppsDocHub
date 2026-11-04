@@ -1,0 +1,64 @@
+---
+title: Technical assessment
+description: Capture message contracts, state, transformations, connectivity and runtime dependencies before implementation.
+---
+
+import {ReadinessGuide} from '../src/components/MigrationTools';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Understand the interface you are replacing
+
+Gather the source and runtime evidence needed to implement the same behavior in Standard: schemas, maps, pipeline stages, bindings, custom code, message samples and failure cases. The controls below highlight design choices rather than eligibility or delivery estimates.
+
+<ReadinessGuide />
+
+## Your intake checklist
+
+<a className="button button--primary" href={useBaseUrl('/downloads/readiness-checklist.csv')} download>Download the readiness checklist (CSV)</a>
+
+Keep the completed inventory in your organization's approved system. Do not upload secrets, customer payloads or confidential bindings to public repositories or support issues.
+
+| Area | Questions to answer | Evidence |
+| --- | --- | --- |
+| Estate | Which applications, interfaces and shared dependencies are involved? | Application and dependency inventory |
+| Artifacts | Which orchestrations, maps, schemas, pipelines, rules and custom assemblies are used? | Source projects, rule exports and dependency list |
+| Connectivity | Which adapters, endpoints, certificates, identities and network paths are required? | Sanitized binding inventory and firewall/DNS requirements |
+| B2B | Which partners, protocols, agreements and acknowledgments are in scope? | Partner register, renewal dates and certification requirements |
+| Behavior | Are ordering, correlation, retries, transactions and compensation business-critical? | Representative scenarios and expected outcomes |
+| Scale | What are peak volumes, latency objectives, payload sizes and retention periods? | Measured production baseline, not estimates alone |
+| Dependencies | Which databases, ERP systems, file shares, schedulers and shared assemblies are required? | Dependency graph and ownership records |
+| Operations | How are support, tracking, alerting, recovery and on-call escalation handled? | Operations baseline and recovery objectives |
+| Delivery | What are the release windows, test environments and acceptance authorities? | Delivery calendar, quality gates and rollback constraints |
+
+## Resolve the technical unknowns
+
+### Source and message contracts
+
+- Source is available and the inventory can be reconciled with production.
+- Inputs are sanitized and access is approved.
+- Referenced schemas, maps, assemblies and pipeline components are available.
+
+### Runtime behavior
+
+- State, correlation keys, ordering and side effects are understood.
+- Missing dependencies and unsupported constructs are recorded.
+- Representative test evidence exists.
+
+### Target implementation
+
+- Architecture and hosting are selected.
+- Gaps have explicit dispositions and acceptance tests.
+- Test dependencies are isolated from production.
+
+## Estimate complexity without false precision
+
+Use the following to identify engineering experiments, not support labels or person-day commitments.
+
+| Band | Typical signals | Next estimation activity |
+| --- | --- | --- |
+| Simple | A bounded flow, standard connectivity, little custom behavior | Implement a pilot and measure actual effort |
+| Medium | Transformations, multiple endpoints and operational dependencies | Validate a representative pattern and price its remediation |
+| Complex | Stateful correlation, custom code, B2B or strong non-functional constraints | Run a time-boxed engineering spike before committing a wave |
+| Exceptional | BAM/ESB redesign, unsupported dependencies or broad cross-system transactions | Produce a separately reviewed architecture and delivery plan |
+
+Estimate discovery, remediation, testing, partner coordination and cutover separately. Calibrate ranges with observed pilot throughput and named team capacity; no duration or staffing number is reliable from artifact counts alone.

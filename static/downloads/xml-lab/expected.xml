@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FulfillmentRequest xmlns="urn:example:fulfillment">
+  <OrderId>SO-1001</OrderId>
+  <Customer>C-42</Customer>
+  <Units>2</Units>
+</FulfillmentRequest>
