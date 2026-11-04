@@ -23,7 +23,8 @@ const config = {
         {from: '/docs', to: '/docs/start'},
         {from: '/docs/capabilities', to: '/docs/journey'},
         {from: ['/sources', '/docs/sources'], to: '/docs/start'},
-        ...['start', 'lifecycle', 'readiness', 'journey', 'hosting', 'migration-agent', 'workshop', 'migration-factory', 'validation', 'cutover', 'support']
+        {from: ['/cutover', '/docs/cutover'], to: '/docs/validation'},
+        ...['start', 'lifecycle', 'readiness', 'journey', 'hosting', 'migration-agent', 'workshop', 'migration-factory', 'validation', 'support']
           .map((slug) => ({from: `/${slug}`, to: `/docs/${slug}`})),
       ],
     }],

@@ -184,16 +184,24 @@ test('every local Markdown content link resolves to a real document', () => {
   }
 });
 
-test('download templates include explicit owners, evidence and unsigned decisions', () => {
-  for (const file of ['readiness-checklist.csv', 'cutover-runbook.csv']) {
-    const content = readFileSync(resolve(root, 'static', 'downloads', file), 'utf8');
-    const lines = content.trim().split(/\r?\n/);
-    const columns = lines[0].split('","').length;
-    assert.ok(lines.length >= 15);
-    assert.match(lines[0], /Owner/);
-    assert.match(lines[0], /Evidence/);
-    for (const line of lines) assert.equal(line.split('","').length, columns, `${file}: malformed row`);
+test('cutover and decommission runbooks and their download links are removed', () => {
+  assert.ok(!existsSync(resolve(root, 'docs', 'cutover.md')));
+  assert.ok(!existsSync(resolve(root, 'static', 'downloads', 'cutover-runbook.csv')));
+  assert.doesNotMatch(readFileSync(resolve(root, 'sidebars.js'), 'utf8'), /'cutover'/);
+  for (const file of readdirSync(resolve(root, 'docs'))) {
+    assert.doesNotMatch(readFileSync(resolve(root, 'docs', file), 'utf8'), /cutover\.md|cutover-runbook\.csv/);
   }
+});
+
+test('readiness template includes explicit owners and evidence', () => {
+  const file = 'readiness-checklist.csv';
+  const content = readFileSync(resolve(root, 'static', 'downloads', file), 'utf8');
+  const lines = content.trim().split(/\r?\n/);
+  const columns = lines[0].split('","').length;
+  assert.ok(lines.length >= 15);
+  assert.match(lines[0], /Owner/);
+  assert.match(lines[0], /Evidence/);
+  for (const line of lines) assert.equal(line.split('","').length, columns, `${file}: malformed row`);
 });
 
 test('downloaded XML lab executes valid, invalid-quantity and namespace assertions', () => {

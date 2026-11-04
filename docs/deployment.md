@@ -67,4 +67,4 @@ This hub does not provision infrastructure or supply a universal deployment comm
 | Startup/storage errors | Required runtime settings, storage connectivity, DNS and permissions |
 | Trigger fires against the wrong system | Environment overrides and stale connection references |
 
-Use the [technical testing guide](./validation.md) for deployment smoke checks and [cutover reference](./cutover.md) for production traffic switching.
+Use the [technical testing guide](./validation.md) for deployment smoke checks and troubleshooting.

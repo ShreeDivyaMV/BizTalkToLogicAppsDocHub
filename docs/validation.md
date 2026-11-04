@@ -70,4 +70,4 @@ Set numeric performance, error-rate, reconciliation and recovery thresholds per 
 
 The business owner approves parity; operations accepts monitoring and recovery; security approves controls; the release owner accepts coexistence and rollback. Any unresolved exception must have explicit risk acceptance and a named owner.
 
-Continue with the [cutover runbook](./cutover.md).
+See [deployment and configuration](./deployment.md) for packaging, environment settings and deployment diagnostics.

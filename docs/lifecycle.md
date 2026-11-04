@@ -77,7 +77,7 @@ These are recommended delivery phases, **not Microsoft-mandated deadlines or pro
 - Archive source, configuration, migration decisions and acceptance evidence.
 - Retire licenses and infrastructure through your normal change process.
 
-**Exit:** a signed retirement record. Use the [cutover and retirement runbook](./cutover.md).
+**Exit:** a signed retirement record.
 
 ## Sources
 

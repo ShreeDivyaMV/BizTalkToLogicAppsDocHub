@@ -37,7 +37,7 @@ Local search is generated during the production build. Use `npm run serve` to va
 - Guides for schemas/maps/pipelines, connectors/identity/networking and custom .NET.
 - Standard project layout, configuration, artifact packaging and diagnostics.
 - Downloadable local XSD/XSLT lab with positive and negative regression cases.
-- Technical assessment without version gating; supporting lifecycle, tooling, support and cutover references.
+- Technical assessment without version gating; supporting lifecycle, tooling and support references.
 - Support directory and inline product references; no separate source-policy page.
 
 The questionnaire keeps answers only in page memory. It does not upload data, assess your estate or call the Migration Agent. No backend, analytics, credentials, Azure resources or deployment are included.

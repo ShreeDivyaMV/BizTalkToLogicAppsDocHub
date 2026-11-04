@@ -9,7 +9,7 @@ export default {
     {type: 'category', label: '3. Build on Logic Apps and AIS', collapsed: false, items: [
       'hosting', 'features', 'ais-services', 'journey', 'transforms', 'custom-code',
       'networking', 'connectivity', 'pricing', 'deployment',
-      'workshop', 'validation', 'migration-factory', 'cutover',
+      'workshop', 'validation', 'migration-factory',
     ]},
   ],
 };
